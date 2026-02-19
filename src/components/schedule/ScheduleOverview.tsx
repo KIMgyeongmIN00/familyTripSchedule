@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useCallback } from 'react';
 import { Stack, Title, Text, ActionIcon, Group, Loader, Center } from '@mantine/core';
 import { IconLogout } from '@tabler/icons-react';
 import { DayCard } from './DayCard';
@@ -16,9 +16,9 @@ interface ScheduleOverviewProps {
 export function ScheduleOverview({ userName, onLogout }: ScheduleOverviewProps) {
   const [schedules, setSchedules] = useState<Schedule[]>([]);
   const [loading, setLoading] = useState(true);
-  const supabase = createClient();
 
-  const fetchSchedules = async () => {
+  const fetchSchedules = useCallback(async () => {
+    const supabase = createClient();
     const { data } = await supabase
       .from('schedules')
       .select('*')
@@ -31,11 +31,13 @@ export function ScheduleOverview({ userName, onLogout }: ScheduleOverviewProps) 
       setSchedules(data);
     }
     setLoading(false);
-  };
+  }, []);
 
   useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect -- Initial data fetch is intentional
     fetchSchedules();
 
+    const supabase = createClient();
     const channel = supabase
       .channel('schedules-overview')
       .on(
@@ -50,7 +52,7 @@ export function ScheduleOverview({ userName, onLogout }: ScheduleOverviewProps) 
     return () => {
       supabase.removeChannel(channel);
     };
-  }, []);
+  }, [fetchSchedules]);
 
   const getSchedulesByDate = (date: string) => {
     return schedules.filter((s) => s.date === date);

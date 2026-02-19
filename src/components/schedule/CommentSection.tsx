@@ -1,7 +1,7 @@
 'use client';
 
-import { useState, useEffect } from 'react';
-import { Stack, Text, TextInput, Button, Group, Paper, ActionIcon, Divider } from '@mantine/core';
+import { useState, useEffect, useCallback } from 'react';
+import { Stack, Text, TextInput, Group, Paper, ActionIcon, Divider } from '@mantine/core';
 import { IconSend, IconTrash } from '@tabler/icons-react';
 import { addComment, deleteComment } from '@/actions/schedules';
 import { createClient } from '@/lib/supabase/client';
@@ -22,9 +22,9 @@ export function CommentSection({ scheduleId, userName }: CommentSectionProps) {
   const [comments, setComments] = useState<Comment[]>([]);
   const [newComment, setNewComment] = useState('');
   const [loading, setLoading] = useState(false);
-  const supabase = createClient();
 
-  const fetchComments = async () => {
+  const fetchComments = useCallback(async () => {
+    const supabase = createClient();
     const { data } = await supabase
       .from('comments')
       .select('*')
@@ -34,11 +34,12 @@ export function CommentSection({ scheduleId, userName }: CommentSectionProps) {
     if (data) {
       setComments(data);
     }
-  };
+  }, [scheduleId]);
 
   useEffect(() => {
     fetchComments();
 
+    const supabase = createClient();
     const channel = supabase
       .channel(`comments:${scheduleId}`)
       .on(
@@ -58,7 +59,7 @@ export function CommentSection({ scheduleId, userName }: CommentSectionProps) {
     return () => {
       supabase.removeChannel(channel);
     };
-  }, [scheduleId]);
+  }, [scheduleId, fetchComments]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();

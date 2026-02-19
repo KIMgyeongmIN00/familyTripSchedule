@@ -7,9 +7,9 @@ import type { Schedule } from '@/lib/supabase/types';
 export function useRealtimeSchedules(date: string) {
   const [schedules, setSchedules] = useState<Schedule[]>([]);
   const [loading, setLoading] = useState(true);
-  const supabase = createClient();
 
   const fetchSchedules = useCallback(async () => {
+    const supabase = createClient();
     setLoading(true);
     const { data } = await supabase
       .from('schedules')
@@ -22,11 +22,12 @@ export function useRealtimeSchedules(date: string) {
       setSchedules(data);
     }
     setLoading(false);
-  }, [date, supabase]);
+  }, [date]);
 
   useEffect(() => {
     fetchSchedules();
 
+    const supabase = createClient();
     const channel = supabase
       .channel(`schedules:${date}`)
       .on(
@@ -46,7 +47,7 @@ export function useRealtimeSchedules(date: string) {
     return () => {
       supabase.removeChannel(channel);
     };
-  }, [date, fetchSchedules, supabase]);
+  }, [date, fetchSchedules]);
 
   return {
     schedules,
