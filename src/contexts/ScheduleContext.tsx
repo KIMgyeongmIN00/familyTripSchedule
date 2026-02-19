@@ -1,6 +1,6 @@
 'use client';
 
-import { createContext, useContext, useState, useCallback, useEffect, ReactNode } from 'react';
+import { createContext, useContext, useState, useCallback, useEffect, useRef, ReactNode, startTransition } from 'react';
 import { createClient } from '@/lib/supabase/client';
 import { TRIP_DATES } from '@/lib/constants';
 import type { Schedule } from '@/lib/supabase/types';
@@ -17,6 +17,7 @@ const ScheduleContext = createContext<ScheduleContextType | null>(null);
 export function ScheduleProvider({ children }: { children: ReactNode }) {
   const [schedules, setSchedules] = useState<Schedule[]>([]);
   const [loading, setLoading] = useState(true);
+  const initializedRef = useRef(false);
 
   const fetchSchedules = useCallback(async () => {
     const supabase = createClient();
@@ -28,10 +29,12 @@ export function ScheduleProvider({ children }: { children: ReactNode }) {
       .order('date')
       .order('start_time', { nullsFirst: false });
 
-    if (data) {
-      setSchedules(data);
-    }
-    setLoading(false);
+    startTransition(() => {
+      if (data) {
+        setSchedules(data);
+      }
+      setLoading(false);
+    });
   }, []);
 
   const getSchedulesByDate = useCallback((date: string) => {
@@ -39,6 +42,9 @@ export function ScheduleProvider({ children }: { children: ReactNode }) {
   }, [schedules]);
 
   useEffect(() => {
+    if (initializedRef.current) return;
+    initializedRef.current = true;
+
     fetchSchedules();
 
     const supabase = createClient();
@@ -47,14 +53,11 @@ export function ScheduleProvider({ children }: { children: ReactNode }) {
       .on(
         'postgres_changes',
         { event: '*', schema: 'public', table: 'schedules' },
-        (payload) => {
-          console.log('[Realtime] Global change:', payload);
+        () => {
           fetchSchedules();
         }
       )
-      .subscribe((status) => {
-        console.log('[Realtime] Global subscription:', status);
-      });
+      .subscribe();
 
     return () => {
       supabase.removeChannel(channel);

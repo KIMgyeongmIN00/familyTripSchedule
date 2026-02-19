@@ -1,35 +1,43 @@
-'use client';
+"use client";
 
-import { useState } from 'react';
-import { TextInput, PasswordInput, Button, Alert, Stack, Title, Text } from '@mantine/core';
-import { IconAlertCircle } from '@tabler/icons-react';
+import {
+  Alert,
+  Button,
+  PasswordInput,
+  Stack,
+  Text,
+  TextInput,
+  Title,
+} from "@mantine/core";
+import { IconAlertCircle } from "@tabler/icons-react";
+import { useState } from "react";
 
 interface AuthFormProps {
   onLogin: (name: string, password: string) => boolean;
 }
 
 export function AuthForm({ onLogin }: AuthFormProps) {
-  const [name, setName] = useState('');
-  const [password, setPassword] = useState('');
-  const [error, setError] = useState('');
+  const [name, setName] = useState("");
+  const [password, setPassword] = useState("");
+  const [error, setError] = useState("");
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    setError('');
+    setError("");
 
     if (!name.trim()) {
-      setError('이름을 입력해주세요.');
+      setError("이름을 입력해주세요.");
       return;
     }
 
     if (!password) {
-      setError('패스워드를 입력해주세요.');
+      setError("패스워드를 입력해주세요.");
       return;
     }
 
     const success = onLogin(name.trim(), password);
     if (!success) {
-      setError('패스워드가 올바르지 않습니다.');
+      setError("패스워드가 올바르지 않습니다.");
     }
   };
 
@@ -37,12 +45,20 @@ export function AuthForm({ onLogin }: AuthFormProps) {
     <form onSubmit={handleSubmit} className="w-full">
       <Stack gap="lg">
         <div className="text-center">
-          <Title order={2} mb="xs">가족 여행 일정</Title>
-          <Text c="dimmed" size="sm">2025년 5월 22일 ~ 25일</Text>
+          <Title order={2} mb="xs">
+            가족 여행 일정
+          </Title>
+          <Text c="dimmed" size="sm">
+            2025년 5월 22일 ~ 25일
+          </Text>
         </div>
 
         {error && (
-          <Alert icon={<IconAlertCircle size={16} />} color="red" variant="light">
+          <Alert
+            icon={<IconAlertCircle size={16} />}
+            color="red"
+            variant="light"
+          >
             {error}
           </Alert>
         )}

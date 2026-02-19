@@ -1,32 +1,32 @@
-import type { Metadata, Viewport } from 'next';
-import { ColorSchemeScript, MantineProvider, createTheme } from '@mantine/core';
-import { ClientProviders } from '@/components/providers/ClientProviders';
-import './globals.css';
+import { ClientProviders } from "@/components/providers/ClientProviders";
+import { ColorSchemeScript, MantineProvider, createTheme } from "@mantine/core";
+import type { Metadata, Viewport } from "next";
+import "./globals.css";
 
 export const metadata: Metadata = {
-  title: '가족 여행 일정',
-  description: '2026년 5월 가족 여행 일정 공유',
-  manifest: '/manifest.json',
+  title: "가족 여행 일정",
+  description: "2026년 5월 가족 여행 일정 공유",
+  manifest: "/manifest.json",
   appleWebApp: {
     capable: true,
-    statusBarStyle: 'default',
-    title: '여행일정',
+    statusBarStyle: "default",
+    title: "여행일정",
   },
 };
 
 export const viewport: Viewport = {
-  width: 'device-width',
+  width: "device-width",
   initialScale: 1,
   maximumScale: 1,
   userScalable: false,
   themeColor: [
-    { media: '(prefers-color-scheme: light)', color: '#ffffff' },
-    { media: '(prefers-color-scheme: dark)', color: '#1a1b1e' },
+    { media: "(prefers-color-scheme: light)", color: "#ffffff" },
+    { media: "(prefers-color-scheme: dark)", color: "#1a1b1e" },
   ],
 };
 
 const theme = createTheme({
-  primaryColor: 'blue',
+  primaryColor: "blue",
 });
 
 export default function RootLayout({
@@ -42,9 +42,7 @@ export default function RootLayout({
       <body>
         <MantineProvider theme={theme} defaultColorScheme="auto">
           <ClientProviders>
-            <div className="mx-auto max-w-md min-h-screen">
-              {children}
-            </div>
+            <div className="mx-auto max-w-md min-h-screen">{children}</div>
           </ClientProviders>
         </MantineProvider>
       </body>

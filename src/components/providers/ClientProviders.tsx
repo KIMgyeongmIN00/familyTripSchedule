@@ -1,7 +1,7 @@
-'use client';
+"use client";
 
-import { ReactNode } from 'react';
-import { ScheduleProvider } from '@/contexts/ScheduleContext';
+import { ScheduleProvider } from "@/contexts/ScheduleContext";
+import { ReactNode } from "react";
 
 export function ClientProviders({ children }: { children: ReactNode }) {
   return <ScheduleProvider>{children}</ScheduleProvider>;

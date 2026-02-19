@@ -1,6 +1,6 @@
-'use client';
+"use client";
 
-import { Card, Skeleton, Stack, Group } from '@mantine/core';
+import { Card, Group, Skeleton, Stack } from "@mantine/core";
 
 export function DayCardSkeleton() {
   return (

@@ -12,7 +12,7 @@ export interface Schedule {
   completed: boolean;
 }
 
-export type ScheduleInsert = Omit<Schedule, 'id' | 'created_at' | 'updated_at'>;
+export type ScheduleInsert = Omit<Schedule, 'id' | 'created_at' | 'updated_at' | 'completed'> & { completed?: boolean };
 export type ScheduleUpdate = Partial<Omit<Schedule, 'id' | 'created_at'>>;
 
 export type Database = {

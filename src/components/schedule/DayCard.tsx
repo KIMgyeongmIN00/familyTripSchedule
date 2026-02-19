@@ -54,7 +54,11 @@ export function DayCard({ date, dayNumber, schedules }: DayCardProps) {
                 c={schedule.completed ? "dimmed" : undefined}
               >
                 {schedule.start_time && (
-                  <Text component="span" fw={500} c={schedule.completed ? "dimmed" : "blue"}>
+                  <Text
+                    component="span"
+                    fw={500}
+                    c={schedule.completed ? "dimmed" : "blue"}
+                  >
                     {formatTime(schedule.start_time)}{" "}
                   </Text>
                 )}

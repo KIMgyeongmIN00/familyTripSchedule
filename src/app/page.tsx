@@ -1,9 +1,9 @@
-'use client';
+"use client";
 
-import { Center, Loader } from '@mantine/core';
-import { useAuth } from '@/hooks/useAuth';
-import { AuthForm } from '@/components/auth/AuthForm';
-import { ScheduleOverview } from '@/components/schedule/ScheduleOverview';
+import { AuthForm } from "@/components/auth/AuthForm";
+import { ScheduleOverview } from "@/components/schedule/ScheduleOverview";
+import { useAuth } from "@/hooks/useAuth";
+import { Center, Loader } from "@mantine/core";
 
 export default function Home() {
   const { isLoading, isAuthenticated, userName, login } = useAuth();
