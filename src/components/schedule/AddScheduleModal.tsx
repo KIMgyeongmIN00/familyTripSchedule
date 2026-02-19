@@ -10,9 +10,10 @@ interface AddScheduleModalProps {
   onClose: () => void;
   date: string;
   userName: string;
+  onSuccess?: () => void;
 }
 
-export function AddScheduleModal({ opened, onClose, date, userName }: AddScheduleModalProps) {
+export function AddScheduleModal({ opened, onClose, date, userName, onSuccess }: AddScheduleModalProps) {
   const [loading, setLoading] = useState(false);
   const [form, setForm] = useState({
     title: '',
@@ -58,6 +59,7 @@ export function AddScheduleModal({ opened, onClose, date, userName }: AddSchedul
 
     setLoading(false);
     handleClose();
+    onSuccess?.();
   };
 
   return (

@@ -20,7 +20,7 @@ export default function DayDetailPage({ params }: PageProps) {
   const { date } = use(params);
   const router = useRouter();
   const { isLoading: authLoading, isAuthenticated, userName } = useAuth();
-  const { schedules, loading } = useRealtimeSchedules(date);
+  const { schedules, loading, refetch } = useRealtimeSchedules(date);
   const [modalOpened, { open: openModal, close: closeModal }] = useDisclosure(false);
 
   const tripDates = TRIP_DATES as readonly string[];
@@ -85,7 +85,7 @@ export default function DayDetailPage({ params }: PageProps) {
             <Loader />
           </Center>
         ) : (
-          <ScheduleList schedules={schedules} userName={userName} />
+          <ScheduleList schedules={schedules} userName={userName} onRefresh={refetch} />
         )}
       </main>
 
@@ -94,6 +94,7 @@ export default function DayDetailPage({ params }: PageProps) {
         onClose={closeModal}
         date={date}
         userName={userName}
+        onSuccess={refetch}
       />
     </div>
   );

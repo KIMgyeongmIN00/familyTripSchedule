@@ -13,9 +13,10 @@ import type { Schedule } from '@/lib/supabase/types';
 interface ScheduleItemProps {
   schedule: Schedule;
   userName: string;
+  onRefresh: () => void;
 }
 
-export function ScheduleItem({ schedule, userName }: ScheduleItemProps) {
+export function ScheduleItem({ schedule, userName, onRefresh }: ScheduleItemProps) {
   const [deleting, setDeleting] = useState(false);
   const [deleteModalOpened, { open: openDeleteModal, close: closeDeleteModal }] = useDisclosure(false);
   const [editModalOpened, { open: openEditModal, close: closeEditModal }] = useDisclosure(false);
@@ -28,6 +29,12 @@ export function ScheduleItem({ schedule, userName }: ScheduleItemProps) {
     await deleteSchedule(schedule.id);
     closeDeleteModal();
     setDeleting(false);
+    onRefresh();
+  };
+
+  const handleEditClose = () => {
+    closeEditModal();
+    onRefresh();
   };
 
   const timeDisplay = schedule.start_time
@@ -105,7 +112,7 @@ export function ScheduleItem({ schedule, userName }: ScheduleItemProps) {
 
       <EditScheduleModal
         opened={editModalOpened}
-        onClose={closeEditModal}
+        onClose={handleEditClose}
         schedule={schedule}
       />
 
