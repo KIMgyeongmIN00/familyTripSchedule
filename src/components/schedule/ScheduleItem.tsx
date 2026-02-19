@@ -1,13 +1,29 @@
 'use client';
 
-import { useState } from 'react';
-import { Card, Text, Group, ActionIcon, Badge, Stack, Modal, Button } from '@mantine/core';
+import { useState, ReactNode } from 'react';
+import { Card, Text, Group, ActionIcon, Badge, Stack, Modal, Button, Anchor, Checkbox } from '@mantine/core';
 import { useDisclosure } from '@mantine/hooks';
 import { IconTrash, IconClock, IconMapPin, IconUser, IconPencil } from '@tabler/icons-react';
-import { deleteSchedule } from '@/actions/schedules';
+import { deleteSchedule, toggleScheduleComplete } from '@/actions/schedules';
 import { formatTime } from '@/lib/utils';
 import { EditScheduleModal } from './EditScheduleModal';
 import type { Schedule } from '@/lib/supabase/types';
+
+function linkifyText(text: string): ReactNode[] {
+  const urlRegex = /(https?:\/\/[^\s]+)/g;
+  const parts = text.split(urlRegex);
+
+  return parts.map((part, index) => {
+    if (urlRegex.test(part)) {
+      return (
+        <Anchor key={index} href={part} target="_blank" rel="noopener noreferrer">
+          {part}
+        </Anchor>
+      );
+    }
+    return part;
+  });
+}
 
 interface ScheduleItemProps {
   schedule: Schedule;
@@ -17,11 +33,19 @@ interface ScheduleItemProps {
 
 export function ScheduleItem({ schedule, userName, onRefresh }: ScheduleItemProps) {
   const [deleting, setDeleting] = useState(false);
+  const [completing, setCompleting] = useState(false);
   const [deleteModalOpened, { open: openDeleteModal, close: closeDeleteModal }] = useDisclosure(false);
   const [editModalOpened, { open: openEditModal, close: closeEditModal }] = useDisclosure(false);
 
   const isOwner = schedule.created_by === userName;
   const isEdited = schedule.updated_at !== schedule.created_at;
+
+  const handleToggleComplete = async () => {
+    setCompleting(true);
+    await toggleScheduleComplete(schedule.id, !schedule.completed);
+    setCompleting(false);
+    onRefresh();
+  };
 
   const handleDelete = async () => {
     setDeleting(true);
@@ -44,17 +68,31 @@ export function ScheduleItem({ schedule, userName, onRefresh }: ScheduleItemProp
 
   return (
     <>
-      <Card shadow="sm" padding="md" radius="md" withBorder>
+      <Card shadow="sm" padding="md" radius="md" withBorder className={schedule.completed ? 'opacity-60' : ''}>
         <Group justify="space-between" align="flex-start">
-          <Stack gap="xs" className="flex-1">
-            <Group gap="xs">
-              <Text fw={600} size="lg">{schedule.title}</Text>
-              {isEdited && (
-                <Badge size="xs" variant="light" color="gray">
-                  수정됨
-                </Badge>
-              )}
-            </Group>
+          <Group align="flex-start" gap="sm" className="flex-1">
+            <Checkbox
+              checked={schedule.completed}
+              onChange={handleToggleComplete}
+              disabled={completing}
+              className="mt-1"
+            />
+            <Stack gap="xs" className="flex-1">
+              <Group gap="xs">
+                <Text fw={600} size="lg" td={schedule.completed ? 'line-through' : undefined}>
+                  {schedule.title}
+                </Text>
+                {schedule.completed && (
+                  <Badge size="xs" variant="light" color="green">
+                    완료
+                  </Badge>
+                )}
+                {isEdited && !schedule.completed && (
+                  <Badge size="xs" variant="light" color="gray">
+                    수정됨
+                  </Badge>
+                )}
+              </Group>
 
             {timeDisplay && (
               <Group gap="xs">
@@ -72,7 +110,7 @@ export function ScheduleItem({ schedule, userName, onRefresh }: ScheduleItemProp
 
             {schedule.description && (
               <Text size="sm" c="dimmed" className="whitespace-pre-wrap">
-                {schedule.description}
+                {linkifyText(schedule.description)}
               </Text>
             )}
 
@@ -84,7 +122,8 @@ export function ScheduleItem({ schedule, userName, onRefresh }: ScheduleItemProp
                 </Badge>
               </Group>
             )}
-          </Stack>
+            </Stack>
+          </Group>
 
           <Group gap="xs">
             {isOwner && (

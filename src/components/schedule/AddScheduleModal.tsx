@@ -1,9 +1,16 @@
-'use client';
+"use client";
 
-import { useState } from 'react';
-import { Modal, TextInput, Textarea, Button, Group, Stack } from '@mantine/core';
-import { TimeInput } from '@mantine/dates';
-import { addSchedule } from '@/actions/schedules';
+import { addSchedule } from "@/actions/schedules";
+import {
+  Button,
+  Group,
+  Modal,
+  Stack,
+  TextInput,
+  Textarea,
+} from "@mantine/core";
+import { TimeInput } from "@mantine/dates";
+import { useState } from "react";
 
 interface AddScheduleModalProps {
   opened: boolean;
@@ -13,23 +20,29 @@ interface AddScheduleModalProps {
   onSuccess?: () => void;
 }
 
-export function AddScheduleModal({ opened, onClose, date, userName, onSuccess }: AddScheduleModalProps) {
+export function AddScheduleModal({
+  opened,
+  onClose,
+  date,
+  userName,
+  onSuccess,
+}: AddScheduleModalProps) {
   const [loading, setLoading] = useState(false);
   const [form, setForm] = useState({
-    title: '',
-    location: '',
-    start_time: '',
-    end_time: '',
-    description: '',
+    title: "",
+    location: "",
+    start_time: "",
+    end_time: "",
+    description: "",
   });
 
   const resetForm = () => {
     setForm({
-      title: '',
-      location: '',
-      start_time: '',
-      end_time: '',
-      description: '',
+      title: "",
+      location: "",
+      start_time: "",
+      end_time: "",
+      description: "",
     });
   };
 

@@ -1,10 +1,17 @@
-'use client';
+"use client";
 
-import { useState, useEffect } from 'react';
-import { Modal, TextInput, Textarea, Button, Group, Stack } from '@mantine/core';
-import { TimeInput } from '@mantine/dates';
-import { updateSchedule } from '@/actions/schedules';
-import type { Schedule } from '@/lib/supabase/types';
+import { updateSchedule } from "@/actions/schedules";
+import type { Schedule } from "@/lib/supabase/types";
+import {
+  Button,
+  Group,
+  Modal,
+  Stack,
+  TextInput,
+  Textarea,
+} from "@mantine/core";
+import { TimeInput } from "@mantine/dates";
+import { useEffect, useState } from "react";
 
 interface EditScheduleModalProps {
   opened: boolean;
@@ -12,24 +19,28 @@ interface EditScheduleModalProps {
   schedule: Schedule;
 }
 
-export function EditScheduleModal({ opened, onClose, schedule }: EditScheduleModalProps) {
+export function EditScheduleModal({
+  opened,
+  onClose,
+  schedule,
+}: EditScheduleModalProps) {
   const [loading, setLoading] = useState(false);
   const [form, setForm] = useState({
-    title: '',
-    location: '',
-    start_time: '',
-    end_time: '',
-    description: '',
+    title: "",
+    location: "",
+    start_time: "",
+    end_time: "",
+    description: "",
   });
 
   useEffect(() => {
     if (opened) {
       setForm({
         title: schedule.title,
-        location: schedule.location || '',
-        start_time: schedule.start_time?.slice(0, 5) || '',
-        end_time: schedule.end_time?.slice(0, 5) || '',
-        description: schedule.description || '',
+        location: schedule.location || "",
+        start_time: schedule.start_time?.slice(0, 5) || "",
+        end_time: schedule.end_time?.slice(0, 5) || "",
+        description: schedule.description || "",
       });
     }
   }, [opened, schedule]);

@@ -67,3 +67,18 @@ export async function deleteSchedule(id: string) {
 
   return { success: true };
 }
+
+export async function toggleScheduleComplete(id: string, completed: boolean) {
+  const supabase = await createClient();
+
+  const { error } = await supabase
+    .from('schedules')
+    .update({ completed, updated_at: new Date().toISOString() })
+    .eq('id', id);
+
+  if (error) {
+    return { success: false, error: error.message };
+  }
+
+  return { success: true };
+}

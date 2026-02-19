@@ -9,6 +9,7 @@ export interface Schedule {
   created_by: string | null;
   created_at: string;
   updated_at: string;
+  completed: boolean;
 }
 
 export type ScheduleInsert = Omit<Schedule, 'id' | 'created_at' | 'updated_at'>;

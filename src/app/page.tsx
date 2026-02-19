@@ -6,7 +6,7 @@ import { AuthForm } from '@/components/auth/AuthForm';
 import { ScheduleOverview } from '@/components/schedule/ScheduleOverview';
 
 export default function Home() {
-  const { isLoading, isAuthenticated, userName, login, logout } = useAuth();
+  const { isLoading, isAuthenticated, userName, login } = useAuth();
 
   if (isLoading) {
     return (
@@ -24,5 +24,5 @@ export default function Home() {
     );
   }
 
-  return <ScheduleOverview userName={userName} onLogout={logout} />;
+  return <ScheduleOverview userName={userName} />;
 }

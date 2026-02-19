@@ -20,12 +20,12 @@ export function DayCard({ date, dayNumber, schedules }: DayCardProps) {
         padding="lg"
         radius="md"
         withBorder
-        className="hover:bg-gray-50 transition-colors cursor-pointer"
+        className="hover:opacity-90 transition-colors cursor-pointer"
       >
         <Group justify="space-between" mb="sm">
           <Group gap="sm">
             <Badge color="blue" variant="filled" size="lg">
-              Day {dayNumber - 1}
+              Day {dayNumber}
             </Badge>
             <div>
               <Text fw={600} size="lg">
@@ -46,9 +46,15 @@ export function DayCard({ date, dayNumber, schedules }: DayCardProps) {
         ) : (
           <Stack gap="xs">
             {schedules.slice(0, 3).map((schedule) => (
-              <Text key={schedule.id} size="sm" lineClamp={1}>
+              <Text
+                key={schedule.id}
+                size="sm"
+                lineClamp={1}
+                td={schedule.completed ? "line-through" : undefined}
+                c={schedule.completed ? "dimmed" : undefined}
+              >
                 {schedule.start_time && (
-                  <Text component="span" fw={500} c="blue">
+                  <Text component="span" fw={500} c={schedule.completed ? "dimmed" : "blue"}>
                     {formatTime(schedule.start_time)}{" "}
                   </Text>
                 )}

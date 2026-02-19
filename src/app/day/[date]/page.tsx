@@ -70,7 +70,7 @@ export default function DayDetailPage({ params }: PageProps) {
 
   return (
     <div className="min-h-screen">
-      <header className="sticky top-0 bg-white border-b p-4 z-10">
+      <header className="sticky top-0 border-b p-4 z-10" style={{ backgroundColor: 'var(--background)' }}>
         <Group justify="space-between">
           <Group gap="sm">
             <ActionIcon variant="subtle" onClick={() => router.push("/")}>

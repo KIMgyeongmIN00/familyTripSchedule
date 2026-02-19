@@ -5,7 +5,13 @@ import './globals.css';
 
 export const metadata: Metadata = {
   title: '가족 여행 일정',
-  description: '2025년 5월 가족 여행 일정 공유',
+  description: '2026년 5월 가족 여행 일정 공유',
+  manifest: '/manifest.json',
+  appleWebApp: {
+    capable: true,
+    statusBarStyle: 'default',
+    title: '여행일정',
+  },
 };
 
 export const viewport: Viewport = {
@@ -13,6 +19,10 @@ export const viewport: Viewport = {
   initialScale: 1,
   maximumScale: 1,
   userScalable: false,
+  themeColor: [
+    { media: '(prefers-color-scheme: light)', color: '#ffffff' },
+    { media: '(prefers-color-scheme: dark)', color: '#1a1b1e' },
+  ],
 };
 
 const theme = createTheme({
@@ -27,12 +37,12 @@ export default function RootLayout({
   return (
     <html lang="ko" suppressHydrationWarning>
       <head>
-        <ColorSchemeScript />
+        <ColorSchemeScript defaultColorScheme="auto" />
       </head>
       <body>
-        <MantineProvider theme={theme}>
+        <MantineProvider theme={theme} defaultColorScheme="auto">
           <ClientProviders>
-            <div className="mx-auto max-w-md min-h-screen bg-white">
+            <div className="mx-auto max-w-md min-h-screen">
               {children}
             </div>
           </ClientProviders>
