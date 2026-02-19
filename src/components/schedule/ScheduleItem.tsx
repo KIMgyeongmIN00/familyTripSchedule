@@ -7,7 +7,6 @@ import { IconTrash, IconClock, IconMapPin, IconUser, IconPencil } from '@tabler/
 import { deleteSchedule } from '@/actions/schedules';
 import { formatTime } from '@/lib/utils';
 import { EditScheduleModal } from './EditScheduleModal';
-import { CommentSection } from './CommentSection';
 import type { Schedule } from '@/lib/supabase/types';
 
 interface ScheduleItemProps {
@@ -106,8 +105,6 @@ export function ScheduleItem({ schedule, userName, onRefresh }: ScheduleItemProp
             </ActionIcon>
           </Group>
         </Group>
-
-        <CommentSection scheduleId={schedule.id} userName={userName} />
       </Card>
 
       <EditScheduleModal
