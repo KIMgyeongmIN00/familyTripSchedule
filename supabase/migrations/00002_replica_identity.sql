@@ -1,0 +1,2 @@
+-- DELETE 이벤트를 Realtime에서 수신하기 위해 REPLICA IDENTITY FULL 설정
+ALTER TABLE schedules REPLICA IDENTITY FULL;
