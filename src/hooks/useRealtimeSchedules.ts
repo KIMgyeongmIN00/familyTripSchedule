@@ -38,11 +38,14 @@ export function useRealtimeSchedules(date: string) {
           table: 'schedules',
           filter: `date=eq.${date}`,
         },
-        () => {
+        (payload) => {
+          console.log('[Realtime] Schedule change:', payload);
           fetchSchedules();
         }
       )
-      .subscribe();
+      .subscribe((status) => {
+        console.log('[Realtime] Subscription status:', status);
+      });
 
     return () => {
       supabase.removeChannel(channel);

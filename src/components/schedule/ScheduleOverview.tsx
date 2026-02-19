@@ -43,11 +43,14 @@ export function ScheduleOverview({ userName, onLogout }: ScheduleOverviewProps) 
       .on(
         'postgres_changes',
         { event: '*', schema: 'public', table: 'schedules' },
-        () => {
+        (payload) => {
+          console.log('[Realtime] Overview change:', payload);
           fetchSchedules();
         }
       )
-      .subscribe();
+      .subscribe((status) => {
+        console.log('[Realtime] Overview subscription status:', status);
+      });
 
     return () => {
       supabase.removeChannel(channel);
