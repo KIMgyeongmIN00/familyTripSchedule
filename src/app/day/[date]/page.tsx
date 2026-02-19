@@ -23,8 +23,9 @@ export default function DayDetailPage({ params }: PageProps) {
   const { schedules, loading } = useRealtimeSchedules(date);
   const [modalOpened, { open: openModal, close: closeModal }] = useDisclosure(false);
 
-  const dayNumber = TRIP_DATES.indexOf(date) + 1;
-  const isValidDate = TRIP_DATES.includes(date as typeof TRIP_DATES[number]);
+  const tripDates = TRIP_DATES as readonly string[];
+  const dayNumber = tripDates.indexOf(date) + 1;
+  const isValidDate = tripDates.includes(date);
 
   useEffect(() => {
     if (!authLoading && !isAuthenticated) {
