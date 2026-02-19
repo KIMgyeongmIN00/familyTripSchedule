@@ -1,5 +1,6 @@
 import type { Metadata, Viewport } from 'next';
 import { ColorSchemeScript, MantineProvider, createTheme } from '@mantine/core';
+import { ClientProviders } from '@/components/providers/ClientProviders';
 import './globals.css';
 
 export const metadata: Metadata = {
@@ -30,9 +31,11 @@ export default function RootLayout({
       </head>
       <body>
         <MantineProvider theme={theme}>
-          <div className="mx-auto max-w-md min-h-screen bg-white">
-            {children}
-          </div>
+          <ClientProviders>
+            <div className="mx-auto max-w-md min-h-screen bg-white">
+              {children}
+            </div>
+          </ClientProviders>
         </MantineProvider>
       </body>
     </html>

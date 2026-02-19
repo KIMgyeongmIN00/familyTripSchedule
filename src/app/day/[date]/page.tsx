@@ -1,16 +1,26 @@
-'use client';
+"use client";
 
-import { use, useEffect } from 'react';
-import { useRouter } from 'next/navigation';
-import { ActionIcon, Button, Group, Loader, Center, Title, Text, Stack } from '@mantine/core';
-import { useDisclosure } from '@mantine/hooks';
-import { IconArrowLeft, IconPlus } from '@tabler/icons-react';
-import { useAuth } from '@/hooks/useAuth';
-import { useRealtimeSchedules } from '@/hooks/useRealtimeSchedules';
-import { ScheduleList } from '@/components/schedule/ScheduleList';
-import { AddScheduleModal } from '@/components/schedule/AddScheduleModal';
-import { formatDateKorean, getDayOfWeek } from '@/lib/utils';
-import { TRIP_DATES } from '@/lib/constants';
+import { AddScheduleModal } from "@/components/schedule/AddScheduleModal";
+import { ScheduleList } from "@/components/schedule/ScheduleList";
+import { DetailSkeleton } from "@/components/schedule/ScheduleSkeleton";
+import { useSchedules } from "@/contexts/ScheduleContext";
+import { useAuth } from "@/hooks/useAuth";
+import { TRIP_DATES } from "@/lib/constants";
+import { formatDateKorean, getDayOfWeek } from "@/lib/utils";
+import {
+  ActionIcon,
+  Button,
+  Center,
+  Group,
+  Loader,
+  Stack,
+  Text,
+  Title,
+} from "@mantine/core";
+import { useDisclosure } from "@mantine/hooks";
+import { IconArrowLeft, IconPlus } from "@tabler/icons-react";
+import { useRouter } from "next/navigation";
+import { use, useEffect } from "react";
 
 interface PageProps {
   params: Promise<{ date: string }>;
@@ -20,16 +30,18 @@ export default function DayDetailPage({ params }: PageProps) {
   const { date } = use(params);
   const router = useRouter();
   const { isLoading: authLoading, isAuthenticated, userName } = useAuth();
-  const { schedules, loading, refetch } = useRealtimeSchedules(date);
-  const [modalOpened, { open: openModal, close: closeModal }] = useDisclosure(false);
+  const { loading, getSchedulesByDate, fetchSchedules } = useSchedules();
+  const [modalOpened, { open: openModal, close: closeModal }] =
+    useDisclosure(false);
 
   const tripDates = TRIP_DATES as readonly string[];
   const dayNumber = tripDates.indexOf(date) + 1;
   const isValidDate = tripDates.includes(date);
+  const schedules = getSchedulesByDate(date);
 
   useEffect(() => {
     if (!authLoading && !isAuthenticated) {
-      router.push('/');
+      router.push("/");
     }
   }, [authLoading, isAuthenticated, router]);
 
@@ -50,7 +62,7 @@ export default function DayDetailPage({ params }: PageProps) {
       <Center className="min-h-screen">
         <Stack align="center" gap="md">
           <Text c="dimmed">유효하지 않은 날짜입니다.</Text>
-          <Button onClick={() => router.push('/')}>돌아가기</Button>
+          <Button onClick={() => router.push("/")}>돌아가기</Button>
         </Stack>
       </Center>
     );
@@ -61,12 +73,16 @@ export default function DayDetailPage({ params }: PageProps) {
       <header className="sticky top-0 bg-white border-b p-4 z-10">
         <Group justify="space-between">
           <Group gap="sm">
-            <ActionIcon variant="subtle" onClick={() => router.push('/')}>
+            <ActionIcon variant="subtle" onClick={() => router.push("/")}>
               <IconArrowLeft size={20} />
             </ActionIcon>
             <div>
-              <Title order={4}>Day {dayNumber} - {formatDateKorean(date)}</Title>
-              <Text size="sm" c="dimmed">{getDayOfWeek(date)}</Text>
+              <Title order={4}>
+                Day {dayNumber} - {formatDateKorean(date)}
+              </Title>
+              <Text size="sm" c="dimmed">
+                {getDayOfWeek(date)}
+              </Text>
             </div>
           </Group>
           <Button
@@ -74,18 +90,20 @@ export default function DayDetailPage({ params }: PageProps) {
             size="sm"
             onClick={openModal}
           >
-            추가
+            일정 추가하기
           </Button>
         </Group>
       </header>
 
       <main className="p-4">
         {loading ? (
-          <Center py="xl">
-            <Loader />
-          </Center>
+          <DetailSkeleton />
         ) : (
-          <ScheduleList schedules={schedules} userName={userName} onRefresh={refetch} />
+          <ScheduleList
+            schedules={schedules}
+            userName={userName}
+            onRefresh={fetchSchedules}
+          />
         )}
       </main>
 
@@ -94,7 +112,7 @@ export default function DayDetailPage({ params }: PageProps) {
         onClose={closeModal}
         date={date}
         userName={userName}
-        onSuccess={refetch}
+        onSuccess={fetchSchedules}
       />
     </div>
   );
