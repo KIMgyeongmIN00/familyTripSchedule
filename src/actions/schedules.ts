@@ -2,7 +2,7 @@
 
 import { createServerClient } from '@supabase/ssr';
 import { cookies } from 'next/headers';
-import type { ScheduleInsert, ScheduleUpdate } from '@/lib/supabase/types';
+import type { ScheduleInsert, ScheduleUpdate, CommentInsert } from '@/lib/supabase/types';
 
 async function createClient() {
   const cookieStore = await cookies();
@@ -60,6 +60,30 @@ export async function deleteSchedule(id: string) {
   const supabase = await createClient();
 
   const { error } = await supabase.from('schedules').delete().eq('id', id);
+
+  if (error) {
+    return { success: false, error: error.message };
+  }
+
+  return { success: true };
+}
+
+export async function addComment(input: CommentInsert) {
+  const supabase = await createClient();
+
+  const { error } = await supabase.from('comments').insert(input);
+
+  if (error) {
+    return { success: false, error: error.message };
+  }
+
+  return { success: true };
+}
+
+export async function deleteComment(id: string) {
+  const supabase = await createClient();
+
+  const { error } = await supabase.from('comments').delete().eq('id', id);
 
   if (error) {
     return { success: false, error: error.message };

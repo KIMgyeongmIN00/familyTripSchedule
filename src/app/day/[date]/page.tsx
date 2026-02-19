@@ -85,7 +85,7 @@ export default function DayDetailPage({ params }: PageProps) {
             <Loader />
           </Center>
         ) : (
-          <ScheduleList schedules={schedules} />
+          <ScheduleList schedules={schedules} userName={userName} />
         )}
       </main>
 

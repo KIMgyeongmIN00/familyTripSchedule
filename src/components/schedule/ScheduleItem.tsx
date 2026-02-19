@@ -3,18 +3,25 @@
 import { useState } from 'react';
 import { Card, Text, Group, ActionIcon, Badge, Stack, Modal, Button } from '@mantine/core';
 import { useDisclosure } from '@mantine/hooks';
-import { IconTrash, IconClock, IconMapPin, IconUser } from '@tabler/icons-react';
+import { IconTrash, IconClock, IconMapPin, IconUser, IconPencil } from '@tabler/icons-react';
 import { deleteSchedule } from '@/actions/schedules';
 import { formatTime } from '@/lib/utils';
+import { EditScheduleModal } from './EditScheduleModal';
+import { CommentSection } from './CommentSection';
 import type { Schedule } from '@/lib/supabase/types';
 
 interface ScheduleItemProps {
   schedule: Schedule;
+  userName: string;
 }
 
-export function ScheduleItem({ schedule }: ScheduleItemProps) {
+export function ScheduleItem({ schedule, userName }: ScheduleItemProps) {
   const [deleting, setDeleting] = useState(false);
   const [deleteModalOpened, { open: openDeleteModal, close: closeDeleteModal }] = useDisclosure(false);
+  const [editModalOpened, { open: openEditModal, close: closeEditModal }] = useDisclosure(false);
+
+  const isOwner = schedule.created_by === userName;
+  const isEdited = schedule.updated_at !== schedule.created_at;
 
   const handleDelete = async () => {
     setDeleting(true);
@@ -34,7 +41,14 @@ export function ScheduleItem({ schedule }: ScheduleItemProps) {
       <Card shadow="sm" padding="md" radius="md" withBorder>
         <Group justify="space-between" align="flex-start">
           <Stack gap="xs" className="flex-1">
-            <Text fw={600} size="lg">{schedule.title}</Text>
+            <Group gap="xs">
+              <Text fw={600} size="lg">{schedule.title}</Text>
+              {isEdited && (
+                <Badge size="xs" variant="light" color="gray">
+                  수정됨
+                </Badge>
+              )}
+            </Group>
 
             {timeDisplay && (
               <Group gap="xs">
@@ -66,15 +80,34 @@ export function ScheduleItem({ schedule }: ScheduleItemProps) {
             )}
           </Stack>
 
-          <ActionIcon
-            variant="subtle"
-            color="red"
-            onClick={openDeleteModal}
-          >
-            <IconTrash size={18} />
-          </ActionIcon>
+          <Group gap="xs">
+            {isOwner && (
+              <ActionIcon
+                variant="subtle"
+                color="blue"
+                onClick={openEditModal}
+              >
+                <IconPencil size={18} />
+              </ActionIcon>
+            )}
+            <ActionIcon
+              variant="subtle"
+              color="red"
+              onClick={openDeleteModal}
+            >
+              <IconTrash size={18} />
+            </ActionIcon>
+          </Group>
         </Group>
+
+        <CommentSection scheduleId={schedule.id} userName={userName} />
       </Card>
+
+      <EditScheduleModal
+        opened={editModalOpened}
+        onClose={closeEditModal}
+        schedule={schedule}
+      />
 
       <Modal opened={deleteModalOpened} onClose={closeDeleteModal} title="일정 삭제" centered>
         <Text mb="lg">정말로 이 일정을 삭제하시겠습니까?</Text>

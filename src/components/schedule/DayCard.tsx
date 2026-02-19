@@ -1,10 +1,10 @@
-'use client';
+"use client";
 
-import Link from 'next/link';
-import { Card, Text, Badge, Group, Stack } from '@mantine/core';
-import { IconChevronRight } from '@tabler/icons-react';
-import type { Schedule } from '@/lib/supabase/types';
-import { formatDateKorean, getDayOfWeek, formatTime } from '@/lib/utils';
+import type { Schedule } from "@/lib/supabase/types";
+import { formatDateKorean, formatTime, getDayOfWeek } from "@/lib/utils";
+import { Badge, Card, Group, Stack, Text } from "@mantine/core";
+import { IconChevronRight } from "@tabler/icons-react";
+import Link from "next/link";
 
 interface DayCardProps {
   date: string;
@@ -15,15 +15,25 @@ interface DayCardProps {
 export function DayCard({ date, dayNumber, schedules }: DayCardProps) {
   return (
     <Link href={`/day/${date}`} className="no-underline">
-      <Card shadow="sm" padding="lg" radius="md" withBorder className="hover:bg-gray-50 transition-colors cursor-pointer">
+      <Card
+        shadow="sm"
+        padding="lg"
+        radius="md"
+        withBorder
+        className="hover:bg-gray-50 transition-colors cursor-pointer"
+      >
         <Group justify="space-between" mb="sm">
           <Group gap="sm">
             <Badge color="blue" variant="filled" size="lg">
               Day {dayNumber}
             </Badge>
             <div>
-              <Text fw={600} size="lg">{formatDateKorean(date)}</Text>
-              <Text size="sm" c="dimmed">{getDayOfWeek(date)}</Text>
+              <Text fw={600} size="lg">
+                {formatDateKorean(date)}
+              </Text>
+              <Text size="sm" c="dimmed">
+                {getDayOfWeek(date)}
+              </Text>
             </div>
           </Group>
           <IconChevronRight size={24} className="text-gray-400" />
@@ -39,7 +49,7 @@ export function DayCard({ date, dayNumber, schedules }: DayCardProps) {
               <Text key={schedule.id} size="sm" lineClamp={1}>
                 {schedule.start_time && (
                   <Text component="span" fw={500} c="blue">
-                    {formatTime(schedule.start_time)}{' '}
+                    {formatTime(schedule.start_time)}{" "}
                   </Text>
                 )}
                 {schedule.title}

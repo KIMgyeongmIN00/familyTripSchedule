@@ -6,9 +6,10 @@ import type { Schedule } from '@/lib/supabase/types';
 
 interface ScheduleListProps {
   schedules: Schedule[];
+  userName: string;
 }
 
-export function ScheduleList({ schedules }: ScheduleListProps) {
+export function ScheduleList({ schedules, userName }: ScheduleListProps) {
   if (schedules.length === 0) {
     return (
       <Center py="xl">
@@ -20,7 +21,7 @@ export function ScheduleList({ schedules }: ScheduleListProps) {
   return (
     <Stack gap="md">
       {schedules.map((schedule) => (
-        <ScheduleItem key={schedule.id} schedule={schedule} />
+        <ScheduleItem key={schedule.id} schedule={schedule} userName={userName} />
       ))}
     </Stack>
   );
