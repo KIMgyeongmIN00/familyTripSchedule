@@ -25,7 +25,7 @@ export function DayCard({ date, dayNumber, schedules }: DayCardProps) {
         <Group justify="space-between" mb="sm">
           <Group gap="sm">
             <Badge color="blue" variant="filled" size="lg">
-              Day {dayNumber}
+              Day {dayNumber - 1}
             </Badge>
             <div>
               <Text fw={600} size="lg">
