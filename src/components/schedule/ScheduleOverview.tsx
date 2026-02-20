@@ -39,7 +39,7 @@ export function ScheduleOverview({ userName }: ScheduleOverviewProps) {
       >
         <Group justify="space-between">
           <div>
-            <Title order={3}>가족 여행 일정</Title>
+            <Title order={3}>김가네 제주도 여행 🍊</Title>
             <Text size="sm" c="dimmed">
               안녕하세요, {userName}님
             </Text>

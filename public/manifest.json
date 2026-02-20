@@ -1,7 +1,7 @@
 {
-  "name": "가족 여행 일정",
-  "short_name": "여행일정",
-  "description": "2026년 5월 가족 여행 일정 공유",
+  "name": "김가네 제주도 여행",
+  "short_name": "김가네여행",
+  "description": "한라산보다 높은 텐션, 흑돼지보다 맛있는 추억! 김가네 제주 정복기",
   "start_url": "/",
   "display": "standalone",
   "background_color": "#ffffff",
