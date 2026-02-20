@@ -1,7 +1,7 @@
 {
-  "name": "김가네 제주도 여행",
-  "short_name": "김가네여행",
-  "description": "한라산보다 높은 텐션, 흑돼지보다 맛있는 추억! 김가네 제주 정복기",
+  "name": "김씨 부산댁 제주도 여행",
+  "short_name": "김씨 부산댁여행",
+  "description": "한라산보다 높은 텐션, 흑돼지보다 맛있는 추억! 김씨 부산댁 제주 정복기",
   "start_url": "/",
   "display": "standalone",
   "background_color": "#ffffff",
